@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ball" Version="1.0.0" />
+    <PackageReference Include="BallController" Version="1.0.0" />
+    <PackageReference Include="BallInteractor" Version="1.0.0" />
+    <PackageReference Include="BallPresenter" Version="1.0.0" />
+    <PackageReference Include="Match" Version="1.0.0" />
+    <PackageReference Include="MatchController" Version="1.0.0" />
+    <PackageReference Include="MatchInteractor" Version="1.0.0" />
+    <PackageReference Include="MatchPresenter" Version="1.0.0" />
+    <PackageReference Include="PaddlePresenter" Version="1.0.0" />
+    <PackageReference Include="Paddles" Version="1.0.0" />
+    <PackageReference Include="PaddlesController" Version="1.0.0" />
+    <PackageReference Include="PaddlesInteractor" Version="1.0.0" />
+    <PackageReference Include="PlayerPresenter" Version="1.0.0" />
+    <PackageReference Include="Players" Version="1.0.0" />
+    <PackageReference Include="PlayersController" Version="1.0.0" />
+    <PackageReference Include="PlayersInteractor" Version="1.0.0" />
+    <PackageReference Include="Stage" Version="1.0.0" />
+    <PackageReference Include="StageController" Version="1.0.0" />
+    <PackageReference Include="StageInteractor" Version="1.0.0" />
+    <PackageReference Include="StagePresenter" Version="1.0.0" />
+    <PackageReference Include="TickService" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleBallView\ConsoleBallView.csproj" />
+    <ProjectReference Include="..\ConsoleMatchView\ConsoleMatchView.csproj" />
+    <ProjectReference Include="..\ConsolePaddlesInput\ConsolePaddlesInput.csproj" />
+    <ProjectReference Include="..\ConsolePaddleView\ConsolePaddleView.csproj" />
+    <ProjectReference Include="..\ConsolePlayerView\ConsolePlayerView.csproj" />
+    <ProjectReference Include="..\ConsoleStageView\ConsoleStageView.csproj" />
+    <ProjectReference Include="..\ConsoleTickService\ConsoleTickService.csproj" />
+    <ProjectReference Include="..\ConsoleViewBatch\ConsoleViewBatch.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="ConsoleBallView/ConsoleBallView.csproj" />
+  <Project Path="ConsoleMatchView/ConsoleMatchView.csproj" />
+  <Project Path="ConsolePaddlesInput/ConsolePaddlesInput.csproj" />
+  <Project Path="ConsolePaddleView/ConsolePaddleView.csproj" />
+  <Project Path="ConsolePlayerView/ConsolePlayerView.csproj" />
+  <Project Path="ConsoleStageView/ConsoleStageView.csproj" />
+  <Project Path="ConsoleTickService/ConsoleTickService.csproj" />
+  <Project Path="ConsoleViewBatch/ConsoleViewBatch.csproj" />
+  <Project Path="Main/Main.csproj" />
+</Solution>
