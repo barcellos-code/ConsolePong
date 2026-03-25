@@ -1,9 +1,10 @@
-namespace ConsoleViewBatch;
-
-public interface IViewBatch
+namespace ConsoleViewBatch
 {
-    void QueueForDraw(DrawBatchParameters parameters);
-    void UnqueueForDraw(int instanceGUID);
-    void Start();
-    void Stop();
+    public interface IViewBatch
+    {
+        void QueueForDraw(DrawBatchParameters parameters);
+        void UnqueueForDraw(int instanceGUID);
+        void Start();
+        void Stop();
+    }
 }

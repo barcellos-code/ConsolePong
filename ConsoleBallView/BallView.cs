@@ -1,36 +1,44 @@
+using System;
+using System.IO;
 using BallPresenter;
 using ConsoleViewBatch;
 
-namespace ConsoleBallView;
-
-internal class BallView(IViewBatch viewBatch) : IBallView
+namespace ConsoleBallView
 {
-    private readonly IViewBatch _viewBatch = viewBatch;
-
-    private int _posX;
-    private int _posY;
-
-    public void DrawBall(int posX, int posY)
+    internal class BallView : IBallView
     {
-        _posX = posX;
-        _posY = posY;
+        private readonly IViewBatch _viewBatch;
 
-        var drawBatchParameters = new DrawBatchParameters(
-            instanceGUID: nameof(BallView).GetHashCode(),
-            drawAction: DrawAction,
-            isOneTimeDraw: false
-        );
+        private int _posX;
+        private int _posY;
 
-        _viewBatch.QueueForDraw(drawBatchParameters);
-    }
-
-    private void DrawAction()
-    {
-        try
+        public BallView(IViewBatch viewBatch)
         {
-            Console.SetCursorPosition(_posX, _posY);
-            Console.Write("O");
+            _viewBatch = viewBatch;
         }
-        catch (IOException) { }
+
+        public void DrawBall(int posX, int posY)
+        {
+            _posX = posX;
+            _posY = posY;
+
+            var drawBatchParameters = new DrawBatchParameters(
+                instanceGUID: nameof(BallView).GetHashCode(),
+                drawAction: DrawAction,
+                isOneTimeDraw: false
+            );
+
+            _viewBatch.QueueForDraw(drawBatchParameters);
+        }
+
+        private void DrawAction()
+        {
+            try
+            {
+                Console.SetCursorPosition(_posX, _posY);
+                Console.Write("O");
+            }
+            catch (IOException) { }
+        }
     }
 }

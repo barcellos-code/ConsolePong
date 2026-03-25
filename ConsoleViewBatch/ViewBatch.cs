@@ -1,64 +1,71 @@
-namespace ConsoleViewBatch;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
-internal class ViewBatch : IViewBatch
+namespace ConsoleViewBatch
 {
-    private const float FrameRate = 30; // frames per second
-    private const int Milliseconds = (int)(1 / FrameRate * 1000);
-
-
-    private readonly Dictionary<int, DrawBatchParameters> _instancesToDrawParametersDict = [];
-    private Thread? _drawThread;
-    private bool _isActive;
-
-    public void QueueForDraw(DrawBatchParameters parameters)
-        => _instancesToDrawParametersDict[parameters.InstanceGUID] = parameters;
-
-    public void UnqueueForDraw(int instanceGUID)
+    internal class ViewBatch : IViewBatch
     {
-        if (!_instancesToDrawParametersDict.ContainsKey(instanceGUID))
-            return;
+        private const float FrameRate = 30; // frames per second
+        private const int Milliseconds = (int)(1 / FrameRate * 1000);
 
-        _instancesToDrawParametersDict.Remove(instanceGUID);
-    }
 
-    public void Start()
-    {
-        _isActive = true;
-        _drawThread = new Thread(DrawRoutine);
-        _drawThread.Start();
-    }
+        private readonly Dictionary<int, DrawBatchParameters> _instancesToDrawParametersDict = new Dictionary<int, DrawBatchParameters>();
+        private Thread? _drawThread;
+        private bool _isActive;
 
-    public void Stop()
-        => _isActive = false;
+        public void QueueForDraw(DrawBatchParameters parameters)
+            => _instancesToDrawParametersDict[parameters.InstanceGUID] = parameters;
 
-    private void DrawRoutine()
-    {
-        while(_isActive)
+        public void UnqueueForDraw(int instanceGUID)
         {
-            try
-            {
-                Console.Clear();
-            }
-            catch (IOException) { }
+            if (!_instancesToDrawParametersDict.ContainsKey(instanceGUID))
+                return;
 
-            Draw();
-            Thread.Sleep(Milliseconds);
+            _instancesToDrawParametersDict.Remove(instanceGUID);
         }
-    }
 
-    private void Draw()
-    {
-        for (var i = _instancesToDrawParametersDict.Count - 1; i >= 0; i--)
+        public void Start()
         {
-            var instanceGUID = _instancesToDrawParametersDict.Keys.ElementAt(i);
-            var parameters = _instancesToDrawParametersDict[instanceGUID];
-            var drawAction = parameters.DrawAction;
-            var isOneTimeDraw = parameters.IsOneTimeDraw;
+            _isActive = true;
+            _drawThread = new Thread(DrawRoutine);
+            _drawThread.Start();
+        }
 
-            drawAction?.Invoke();
+        public void Stop()
+            => _isActive = false;
 
-            if (isOneTimeDraw)
-                UnqueueForDraw(instanceGUID);
+        private void DrawRoutine()
+        {
+            while(_isActive)
+            {
+                try
+                {
+                    Console.Clear();
+                }
+                catch (IOException) { }
+
+                Draw();
+                Thread.Sleep(Milliseconds);
+            }
+        }
+
+        private void Draw()
+        {
+            for (var i = _instancesToDrawParametersDict.Count - 1; i >= 0; i--)
+            {
+                var instanceGUID = _instancesToDrawParametersDict.Keys.ElementAt(i);
+                var parameters = _instancesToDrawParametersDict[instanceGUID];
+                var drawAction = parameters.DrawAction;
+                var isOneTimeDraw = parameters.IsOneTimeDraw;
+
+                drawAction?.Invoke();
+
+                if (isOneTimeDraw)
+                    UnqueueForDraw(instanceGUID);
+            }
         }
     }
 }

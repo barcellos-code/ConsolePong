@@ -1,3 +1,4 @@
+using System;
 using Ball;
 using BallController;
 using BallInteractor;
@@ -9,7 +10,7 @@ using ConsolePaddleView;
 using ConsolePlayerView;
 using ConsoleStageView;
 using ConsoleViewBatch;
-using Container;
+using DependencyContainer;
 using Match;
 using MatchController;
 using MatchInteractor;
@@ -29,73 +30,71 @@ using StageInteractor;
 using StagePresenter;
 using TickService;
 
-namespace Main;
-
-internal static class ConsoleContainer
+namespace Main
 {
-    public static IServiceProvider ServiceProvider
+    internal static class ConsoleContainer
     {
-        get
+        private static IServiceProvider? _serviceProvider;
+
+        public static T? GetService<T>() where T : class
         {
-            if (_serviceProvider == null)
+            if (_serviceProvider is null)
             {
                 _serviceProvider = BuildServiceProvider();
-                DependencyContainer.ServiceProvider = _serviceProvider;
-                return _serviceProvider;
+                Container.SetServiceProvider(_serviceProvider);
+
             }
 
-            return _serviceProvider;
+            return _serviceProvider.GetService<T>();
         }
-    }
 
-    private static IServiceProvider? _serviceProvider;
-
-    private static ServiceProvider BuildServiceProvider()
-    {
-        var serviceCollection = new ServiceCollection();
+        private static ServiceProvider BuildServiceProvider()
+        {
+            var serviceCollection = new ServiceCollection();
         
-        // Entities
-        serviceCollection.AddSingleton<IBallService, BallService>();
-        serviceCollection.AddSingleton<IMatchService, MatchService>();
-        serviceCollection.AddSingleton<IPaddlesService, PaddlesService>();
-        serviceCollection.AddSingleton<IPlayersService, PlayersService>();
-        serviceCollection.AddSingleton<IStageService, StageService>();
+            // Entities
+            serviceCollection.AddSingleton<IBallService, BallService>();
+            serviceCollection.AddSingleton<IMatchService, MatchService>();
+            serviceCollection.AddSingleton<IPaddlesService, PaddlesService>();
+            serviceCollection.AddSingleton<IPlayersService, PlayersService>();
+            serviceCollection.AddSingleton<IStageService, StageService>();
         
-        // Interactors
-        serviceCollection.AddSingleton<IBallInteractor, BallInteractor.BallInteractor>();
-        serviceCollection.AddSingleton<IMatchInteractor, MatchInteractor.MatchInteractor>();
-        serviceCollection.AddSingleton<IPaddlesInteractor, PaddlesInteractor.PaddlesInteractor>();
-        serviceCollection.AddSingleton<IPlayersInteractor, PlayersInteractor.PlayersInteractor>();
-        serviceCollection.AddSingleton<IStageInteractor, StageInteractor.StageInteractor>();
+            // Interactors
+            serviceCollection.AddSingleton<IBallInteractor, BallInteractor.BallInteractor>();
+            serviceCollection.AddSingleton<IMatchInteractor, MatchInteractor.MatchInteractor>();
+            serviceCollection.AddSingleton<IPaddlesInteractor, PaddlesInteractor.PaddlesInteractor>();
+            serviceCollection.AddSingleton<IPlayersInteractor, PlayersInteractor.PlayersInteractor>();
+            serviceCollection.AddSingleton<IStageInteractor, StageInteractor.StageInteractor>();
 
-        // Controllers
-        serviceCollection.AddTransient<IBallController, BallController.BallController>();
-        serviceCollection.AddTransient<IMatchController, MatchController.MatchController>();
-        serviceCollection.AddTransient<IPaddlesController, PaddlesController.PaddlesController>();
-        serviceCollection.AddSingleton<IPaddlesInputService, PaddlesInputService>();
-        serviceCollection.AddTransient<IPlayersController, PlayersController.PlayersController>();
-        serviceCollection.AddTransient<IStageController, StageController.StageController>();
+            // Controllers
+            serviceCollection.AddTransient<IBallController, BallController.BallController>();
+            serviceCollection.AddTransient<IMatchController, MatchController.MatchController>();
+            serviceCollection.AddTransient<IPaddlesController, PaddlesController.PaddlesController>();
+            serviceCollection.AddSingleton<IPaddlesInputService, PaddlesInputService>();
+            serviceCollection.AddTransient<IPlayersController, PlayersController.PlayersController>();
+            serviceCollection.AddTransient<IStageController, StageController.StageController>();
 
-        // Presenters
-        serviceCollection.AddTransient<IBallPresenter, BallPresenter.BallPresenter>();
-        serviceCollection.AddTransient<IMatchPresenter, MatchPresenter.MatchPresenter>();
-        serviceCollection.AddTransient<IPaddlePresenter, PaddlePresenter.PaddlePresenter>();
-        serviceCollection.AddTransient<IPlayerPresenter, PlayerPresenter.PlayerPresenter>();
-        serviceCollection.AddTransient<IStagePresenter, StagePresenter.StagePresenter>();
+            // Presenters
+            serviceCollection.AddTransient<IBallPresenter, BallPresenter.BallPresenter>();
+            serviceCollection.AddTransient<IMatchPresenter, MatchPresenter.MatchPresenter>();
+            serviceCollection.AddTransient<IPaddlePresenter, PaddlePresenter.PaddlePresenter>();
+            serviceCollection.AddTransient<IPlayerPresenter, PlayerPresenter.PlayerPresenter>();
+            serviceCollection.AddTransient<IStagePresenter, StagePresenter.StagePresenter>();
 
-        // Infrastructure
+            // Infrastructure
 
-        // Views
-        serviceCollection.AddTransient<IBallView, BallView>();
-        serviceCollection.AddTransient<IMatchView, MatchView>();
-        serviceCollection.AddTransient<IPaddleView, PaddleView>();
-        serviceCollection.AddTransient<IPlayerView, PlayerView>();
-        serviceCollection.AddTransient<IStageView, StageView>();
-        serviceCollection.AddSingleton<IViewBatch, ViewBatch>();
+            // Views
+            serviceCollection.AddTransient<IBallView, BallView>();
+            serviceCollection.AddTransient<IMatchView, MatchView>();
+            serviceCollection.AddTransient<IPaddleView, PaddleView>();
+            serviceCollection.AddTransient<IPlayerView, PlayerView>();
+            serviceCollection.AddTransient<IStageView, StageView>();
+            serviceCollection.AddSingleton<IViewBatch, ViewBatch>();
 
-        // Other concrete implementations
-        serviceCollection.AddSingleton<ITickService, ConsoleTickService.ConsoleTickService>();
+            // Other concrete implementations
+            serviceCollection.AddSingleton<ITickService, ConsoleTickService.ConsoleTickService>();
 
-        return serviceCollection.BuildServiceProvider();
+            return serviceCollection.BuildServiceProvider();
+        }
     }
 }

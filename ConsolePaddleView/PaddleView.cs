@@ -1,41 +1,49 @@
+using System;
+using System.IO;
 using ConsoleViewBatch;
 using PaddlePresenter;
 
-namespace ConsolePaddleView;
-
-internal class PaddleView(IViewBatch viewBatch) : IPaddleView
+namespace ConsolePaddleView
 {
-    private readonly IViewBatch _viewBatch = viewBatch;
-
-    private int _size;
-    private int _posX;
-    private int _posY;
-
-    public void DrawPaddle(int size, int posX, int posY)
+    internal class PaddleView : IPaddleView
     {
-        _size = size;
-        _posX = posX;
-        _posY = posY;
+        private readonly IViewBatch _viewBatch;
 
-        var drawBatchParameters = new DrawBatchParameters(
-            instanceGUID: HashCode.Combine(nameof(PaddleView), _posX),
-            drawAction: DrawAction,
-            isOneTimeDraw: false
-        );
+        private int _size;
+        private int _posX;
+        private int _posY;
 
-        _viewBatch.QueueForDraw(drawBatchParameters);
-    }
-
-    private void DrawAction()
-    {
-        for (int i = 0; i < _size; i++)
+        public PaddleView(IViewBatch viewBatch)
         {
-            try
+            _viewBatch = viewBatch;
+        }
+
+        public void DrawPaddle(int size, int posX, int posY)
+        {
+            _size = size;
+            _posX = posX;
+            _posY = posY;
+
+            var drawBatchParameters = new DrawBatchParameters(
+                instanceGUID: HashCode.Combine(nameof(PaddleView), _posX),
+                drawAction: DrawAction,
+                isOneTimeDraw: false
+            );
+
+            _viewBatch.QueueForDraw(drawBatchParameters);
+        }
+
+        private void DrawAction()
+        {
+            for (int i = 0; i < _size; i++)
             {
-                Console.SetCursorPosition(_posX, _posY + i);
-                Console.Write("|");
+                try
+                {
+                    Console.SetCursorPosition(_posX, _posY + i);
+                    Console.Write("|");
+                }
+                catch (IOException) { }
             }
-            catch (IOException) { }
         }
     }
 }

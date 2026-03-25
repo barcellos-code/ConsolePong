@@ -1,32 +1,35 @@
+using System;
+using System.Threading;
 using TickService;
 
-namespace ConsoleTickService;
-
-internal class ConsoleTickService : ITickService
+namespace ConsoleTickService
 {
-    private const int Milliseconds = 50;
-
-    public event Action? OnTick;
-
-    private Thread? _tickRoutineThread;
-
-    public ConsoleTickService()
+    internal class ConsoleTickService : ITickService
     {
-        StartTick();
-    }
+        private const int Milliseconds = 50;
 
-    private void StartTick()
-    {
-        _tickRoutineThread = new Thread(TickRoutine);
-        _tickRoutineThread.Start();
-    }
+        public event Action? OnTick;
 
-    private void TickRoutine()
-    {
-        while (true)
+        private Thread? _tickRoutineThread;
+
+        public ConsoleTickService()
         {
-            OnTick?.Invoke();
-            Thread.Sleep(Milliseconds);
+            StartTick();
+        }
+
+        private void StartTick()
+        {
+            _tickRoutineThread = new Thread(TickRoutine);
+            _tickRoutineThread.Start();
+        }
+
+        private void TickRoutine()
+        {
+            while (true)
+            {
+                OnTick?.Invoke();
+                Thread.Sleep(Milliseconds);
+            }
         }
     }
 }

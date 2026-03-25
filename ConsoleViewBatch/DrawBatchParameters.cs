@@ -1,8 +1,18 @@
-namespace ConsoleViewBatch;
+using System;
 
-public readonly struct DrawBatchParameters(int instanceGUID, Action drawAction, bool isOneTimeDraw)
+namespace ConsoleViewBatch
 {
-    public readonly int InstanceGUID = instanceGUID;
-    public readonly Action DrawAction = drawAction;
-    public readonly bool IsOneTimeDraw = isOneTimeDraw;
+    public readonly struct DrawBatchParameters
+    {
+        public readonly int InstanceGUID;
+        public readonly Action DrawAction;
+        public readonly bool IsOneTimeDraw;
+
+        public DrawBatchParameters(int instanceGUID, Action drawAction, bool isOneTimeDraw)
+        {
+            InstanceGUID = instanceGUID;
+            DrawAction = drawAction;
+            IsOneTimeDraw = isOneTimeDraw;
+        }
+    }
 }
